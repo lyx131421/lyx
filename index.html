@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梁宇轩 - 个人简历</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        /* 头部样式（不变） */
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+        }
+        .avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            margin-bottom: 20px;
+            transition: transform 0.5s ease;
+        }
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* 导航栏核心优化：缩小高度+横向滚动，不占纵向空间 */
+        .nav {
+            background-color: white;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08); /* 阴影变浅，更轻薄 */
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: auto; /* 取消固定高度，随内容自适应 */
+        }
+        .nav-container {
+            max-width: 100%; /* 全屏宽度，方便横向滚动 */
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: nowrap; /* 强制横向排列，不换行 */
+            overflow-x: auto; /* 超出部分横向滚动，不占纵向空间 */
+            scrollbar-width: none; /* 隐藏滚动条，更美观 */
+            padding: 0 10px; /* 左右留小间隙 */
+        }
+        /* 隐藏PC端滚动条 */
+        .nav-container::-webkit-scrollbar {
+            display: none;
+        }
+        /* 导航项缩小：减少内边距+缩小字体，整体高度降低 */
+        .nav-item {
+            padding: 10px 15px; /* 原来16px→10px（上下），20px→15px（左右），高度减半 */
+            cursor: pointer;
+            font-weight: 500;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            white-space: nowrap; /* 文字不换行，保证横向滚动 */
+            border-bottom: 2px solid transparent; /* 下划线变细，更精致 */
+            font-size: 0.9rem; /* 字体缩小，从1rem→0.9rem */
+        }
+        .nav-item:hover, .nav-item.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+            background-color: #f8f9fa;
+        }
+
+        /* 内容区域样式（不变，保持单个信息项动画） */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto; /* 顶部间距从40px→20px，更紧凑 */
+            padding: 0 20px;
+        }
+        .content-section {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 25px; /* 内容区间距缩小，从40px→25px */
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .info-card {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .info-card h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        /* 单个信息项（不变） */
+        .info-item {
+            display: block;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            opacity: 0;
+            transform: scale(0.92) translateY(12px);
+            transition: 
+                transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                opacity 0.5s ease;
+        }
+        .info-item.animate {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+        .info-item strong {
+            color: #2c3e50;
+            width: 100px;
+            display: inline-block;
+        }
+        .info-item a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* 学校/专业搜索链接（不变） */
+        .searchable-link {
+            color: #2980b9 !important;
+            text-decoration: underline !important;
+            font-weight: 600 !important;
+            font-size: 1.05rem !important;
+        }
+        .searchable-link::after {
+            content: " 🔍";
+            font-size: 0.9rem;
+        }
+        .search-hint {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 3px;
+            display: block;
+            padding-left: 104px;
+        }
+
+        /* 专业技能二级内容（不变） */
+        .major-content {
+            margin-top: 20px;
+        }
+        .major-intro {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .search-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .search-link:hover {
+            background-color: #2980b9;
+            text-decoration: none;
+        }
+
+        /* 页面切换动画（不变） */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 手机端适配（不变，配合导航横向滚动） */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .avatar {
+                width: 120px;
+                height: 120px;
+            }
+            .content-section {
+                padding: 18px;
+                margin-bottom: 20px;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .info-card {
+                padding: 15px;
+            }
+            .info-item {
+                padding: 8px 10px;
+                margin-bottom: 8px;
+            }
+            .info-item strong {
+                width: 80px;
+            }
+            .search-hint {
+                padding-left: 84px;
+            }
+            /* 手机端导航项 padding 再缩小一点 */
+            .nav-item {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部区域（不变） -->
+    <div class="header">
+        <img src="https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/bot-chat-image/cc2861159ef145d4b4f7355cc4782fba.jpeg" alt="梁宇轩照片" class="avatar">
+        <h1>梁宇轩</h1>
+        <p>信号自动控制专业 | 专科毕业生</p>
+    </div>
+
+    <!-- 优化后的导航栏：横向滚动+缩小高度 -->
+    <div class="nav">
+        <div class="nav-container">
+            <div class="nav-item active" data-target="basic-info">个人基础信息</div>
+            <div class="nav-item" data-target="education">教育背景</div>
+            <div class="nav-item" data-target="major">专业技能</div>
+            <div class="nav-item" data-target="family">家庭成员</div>
+            <div class="nav-item" data-target="contact">联系方式</div>
+        </div>
+    </div>
+
+    <!-- 内容区域（不变，保持单个信息项动画） -->
+    <div class="container">
+        <!-- 个人基础信息 -->
+        <div class="content-section active" id="basic-info">
+            <h2 class="section-title">个人基础信息</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>基本信息</h3>
+                    <div class="info-item"><strong>姓名：</strong>梁宇轩</div>
+                    <div class="info-item"><strong>性别：</strong>男</div>
+                    <div class="info-item"><strong>民族：</strong>汉族</div>
+                    <div class="info-item"><strong>政治面貌：</strong>群众</div>
+                </div>
+                <div class="info-card">
+                    <h3>身份信息</h3>
+                    <div class="info-item"><strong>出生年月：</strong>2006-01-19</div>
+                    <div class="info-item"><strong>身份证号：</strong>411425200601190077</div>
+                    <div class="info-item"><strong>婚姻状况：</strong>未婚</div>
+                    <div class="info-item"><strong>最高学历：</strong>专科</div>
+                </div>
+                <div class="info-card">
+                    <h3>身体条件</h3>
+                    <div class="info-item"><strong>身高：</strong>170cm</div>
+                    <div class="info-item"><strong>体重：</strong>53kg</div>
+                    <div class="info-item"><strong>健康状况：</strong>良好</div>
+                    <div class="info-item"><strong>辨色力：</strong>正常</div>
+                </div>
+                <div class="info-card">
+                    <h3>视力情况</h3>
+                    <div class="info-item"><strong>左眼裸视：</strong>4.8（150度）</div>
+                    <div class="info-item"><strong>右眼裸视：</strong>4.7（200度）</div>
+                    <div class="info-item"><strong>左眼矫正：</strong>5.1（正常）</div>
+                    <div class="info-item"><strong>右眼矫正：</strong>5.0（正常）</div>
+                </div>
+                <div class="info-card">
+                    <h3>户籍信息</h3>
+                    <div class="info-item"><strong>户籍性质：</strong>城镇</div>
+                    <div class="info-item"><strong>户籍所在地：</strong>江苏徐州铜山区汉府雅园9号楼5单元</div>
+                    <div class="info-item"><strong>生源地：</strong>江苏省 徐州市 铜山区</div>
+                    <div class="info-item"><strong>籍贯：</strong>河南</div>
+                </div>
+                <div class="info-card">
+                    <h3>其他信息</h3>
+                    <div class="info-item"><strong>服从调剂：</strong>是</div>
+                    <div class="info-item"><strong>邮编：</strong>221116</div>
+                    <div class="info-item"><strong>通讯地址：</strong>江苏徐州铜山区汉府雅园9号楼5单元</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 教育背景 -->
+        <div class="content-section" id="education">
+            <h2 class="section-title">教育背景</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>毕业院校</h3>
+                    <div class="info-item">
+                        <strong>学校名称：</strong>
+                        <a href="https://cn.bing.com/search?q=哈尔滨铁道职业技术学院" target="_blank" class="searchable-link">哈尔滨铁道职业技术学院</a>
+                        <span class="search-hint">点击触发必应搜索</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>所学专业：</strong>
+                        <a href="https://cn.bing.com/search?q=信号自动控制专业" target="_blank" class="searchable-link">信号自动控制</a>
+                        <span class="search-hint">点击触发必应搜索</span>
+                    </div>
+                    <div class="info-item"><strong>专业方向：</strong>信号自动控制</div>
+                    <div class="info-item"><strong>最高学历：</strong>专科</div>
+                </div>
+                <div class="info-card">
+                    <h3>时间信息</h3>
+                    <div class="info-item"><strong>毕业时间：</strong>2026-09-09</div>
+                    <div class="info-item"><strong>入学时间：</strong>2023-09（推算）</div>
+                    <div class="info-item"><strong>学制：</strong>3年（专科标准学制）</div>
+                    <div class="info-item"><strong>在校状态：</strong>待毕业（2026年毕业）</div>
+                </div>
+                <div class="info-card">
+                    <h3>专业相关</h3>
+                    <div class="info-item"><strong>核心领域：</strong>铁路信号、自动控制、轨道交通信号系统</div>
+                    <div class="info-item"><strong>学习重点：</strong>信号设备安装调试、系统维护、故障排查</div>
+                    <div class="info-item"><strong>拓展建议：</strong>可学习铁路信号规范、PLC控制技术</div>
+                    <div class="info-item" style="padding: 10px 0; margin-top: 5px;">
+                        <a href="https://cn.bing.com/search?q=哈尔滨铁道职业技术学院+信号自动控制专业" target="_blank" class="search-link">综合搜索专业详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 专业技能 -->
+        <div class="content-section" id="major">
+            <h2 class="section-title">专业技能与介绍</h2>
+            <div class="info-grid">
+                <div class="info-card" style="grid-column: 1 / -1;">
+                    <h3>信号自动控制专业核心介绍</h3>
+                    <div class="info-item">
+                        <strong>专业名称：</strong>
+                        <a href="https://cn.bing.com/search?q=信号自动控制专业+核心课程+就业方向" target="_blank" class="searchable-link">信号自动控制专业</a>
+                        <span class="search-hint">点击触发必应搜索</span>
+                    </div>
+                    <div class="major-intro">
+                        主要培养掌握铁路信号基础理论和专业技能，能从事轨道交通信号系统（如车站信号、区间信号、列车运行控制系统）的安装、调试、维护、管理及故障处理的高素质技术技能人才。核心课程包括《铁路信号基础》《区间信号自动控制》《车站信号自动控制》《列车运行控制系统》《信号设备故障处理》等，就业方向主要为铁路、地铁、城市轨道交通等企业的信号技术岗位。
+                    </div>
+                    <div style="padding: 10px 0;">
+                        <a href="https://cn.bing.com/search?q=信号自动控制专业+行业前景" target="_blank" class="search-link">搜索专业行业前景</a>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>核心能力</h3>
+                    <div class="info-item"><strong>1. </strong>掌握铁路信号设备的工作原理</div>
+                    <div class="info-item"><strong>2. </strong>具备信号系统安装与调试能力</div>
+                    <div class="info-item"><strong>3. </strong>能进行信号设备日常维护与故障排查</div>
+                    <div class="info-item"><strong>4. </strong>了解轨道交通信号行业规范与标准</div>
+                </div>
+                <div class="info-card">
+                    <h3>相关拓展</h3>
+                    <div class="info-item"><strong>行业趋势：</strong>智能化、数字化信号系统（如CTCS-3）</div>
+                    <div class="info-item"><strong>技能提升：</strong>学习PLC编程、SCADA系统操作</div>
+                    <div class="info-item">
+                        <strong>证书建议：</strong>
+                        <a href="https://cn.bing.com/search?q=铁路信号工+职业资格证书" target="_blank" class="searchable-link">铁路信号工职业资格证书</a>
+                    </div>
+                    <div class="info-item" style="padding: 10px 0; margin-top: 5px;">
+                        <a href="https://cn.bing.com/search?q=铁路信号工+职业资格证书+报考条件" target="_blank" class="search-link">搜索证书报考信息</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 家庭成员 -->
+        <div class="content-section" id="family">
+            <h2 class="section-title">家庭成员信息</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>父亲</h3>
+                    <div class="info-item"><strong>姓名：</strong>梁西征</div>
+                    <div class="info-item"><strong>关系：</strong>父子</div>
+                    <div class="info-item"><strong>备注：</strong>家庭成员主要联系人之一</div>
+                </div>
+                <div class="info-card">
+                    <h3>母亲</h3>
+                    <div class="info-item"><strong>姓名：</strong>张莉</div>
+                    <div class="info-item"><strong>关系：</strong>母子</div>
+                    <div class="info-item"><strong>备注：</strong>家庭成员主要联系人之一</div>
+                </div>
+                <div class="info-card">
+                    <h3>家庭概况</h3>
+                    <div class="info-item"><strong>家庭住址：</strong>江苏徐州铜山区汉府雅园9号楼5单元（与户籍地址一致）</div>
+                    <div class="info-item"><strong>家庭类型：</strong>核心家庭（父母+本人）</div>
+                    <div class="info-item"><strong>联系说明：</strong>本人电话为主要联系方式，紧急情况可联系父母</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 联系方式 -->
+        <div class="content-section" id="contact">
+            <h2 class="section-title">联系方式</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>电话联系</h3>
+                    <div class="info-item"><strong>手机号码：</strong><a href="tel:13104503517">13104503517</a></div>
+                    <div class="info-item"><strong>固定电话：</strong>无</div>
+                    <div class="info-item"><strong>提示：</strong>点击手机号码可直接拨号</div>
+                </div>
+                <div class="info-card">
+                    <h3>网络联系</h3>
+                    <div class="info-item"><strong>电子邮箱：</strong><a href="mailto:1938645179@qq.com">1938645179@qq.com</a></div>
+                    <div class="info-item"><strong>提示：</strong>点击邮箱地址可直接发邮件</div>
+                </div>
+                <div class="info-card">
+                    <h3>地址导航</h3>
+                    <div class="info-item"><strong>通讯地址：</strong><a href="https://map.baidu.com/search/%E6%B1%9F%E8%8B%8F%E5%BE%90%E5%B7%9E%E9%93%9C%E5%B1%B1%E5%8C%BA%E6%B1%89%E5%BA%9C%E9%9B%85%E5%9B%AD9%E5%8F%B7%E6%A5%BC5%E5%8D%95%E5%85%83?querytype=s&c=132&wd=%E6%B1%9F%E8%8B%8F%E5%BE%90%E5%B7%9E%E9%93%9C%E5%B1%B1%E5%8C%BA%E6%B1%89%E5%BA%9C%E9%9B%85%E5%9B%AD9%E5%8F%B7%E6%A5%BC5%E5%8D%95%E5%85%83&da_src=shareurl" target="_blank">江苏徐州铜山区汉府雅园9号楼5单元</a></div>
+                    <div class="info-item"><strong>邮编：</strong>221116</div>
+                    <div class="info-item"><strong>提示：</strong>点击地址可直接导航</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 导航菜单切换（不变，稳定）
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+                
+                item.classList.add('active');
+                const targetId = item.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+                document.getElementById(targetId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // 单个信息项动画（不变，稳定）
+        const infoItems = document.querySelectorAll('.info-item');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.25
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('animate');
+                    }, index * 80);
+                } else {
+                    entry.target.classList.remove('animate');
+                }
+            });
+        }, observerOptions);
+
+        infoItems.forEach(item => {
+            observer.observe(item);
+        });
+
+        window.addEventListener('load', () => {
+            infoItems.forEach((item, index) => {
+                if (item.getBoundingClientRect().top < window.innerHeight * 0.85) {
+                    setTimeout(() => {
+                        item.classList.add('animate');
+                    }, index * 80);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
