@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梁宇轩 - 个人简历</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            scrollbar-width: none; /* 隐藏默认滚动条 */
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border: none;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .avatar:active {
+            transform: scale(0.95);
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        #downloadBtn {
+            display: block;
+            width: 200px;
+            height: 40px;
+            margin: 15px auto;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        #downloadBtn:hover {
+            background-color: #2980b9;
+        }
+        .nav {
+            background-color: white;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding: 0 10px;
+        }
+        .nav-container::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            font-size: 0.9rem;
+        }
+        .nav-item:hover, .nav-item.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .content-section {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 25px;
+            display: block;
+        }
+        .content-section.active {
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .info-card {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .info-card h3 {
+            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .info-item {
+            display: block;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            opacity: 0;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: 
+                transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.475),
+                opacity 0.4s ease;
+        }
+        .info-item.animate {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+        .info-item strong {
+            color: #2c3e50;
+            width: 100px;
+            display: inline-block;
+        }
+        .info-item a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .searchable-link {
+            color: #2980b9 !important;
+            text-decoration: underline !important;
+            font-weight: 600 !important;
+            font-size: 1.05rem !important;
+        }
+        .searchable-link::after {
+            content: " 🔍";
+            font-size: 0.9rem;
+        }
+        .search-hint {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 3px;
+            display: block;
+            padding-left: 104px;
+        }
+        .major-intro {
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            opacity: 0;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: 
+                transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.475),
+                opacity 0.4s ease;
+        }
+        .major-intro.animate {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+        .search-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white !important;
+            font-weight: 500;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .search-link:hover {
+            background-color: #2980b9;
+            text-decoration: none;
+        }
+        #resumeCanvas {
+            display: none;
+        }
+
+        /* 新增：右侧可拖动滑轮（纯控制页面滚动，与彩蛋无关） */
+        .custom-scrollbar {
+            position: fixed;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%); /* 垂直居中 */
+            width: 10px;
+            height: 300px; /* 滑轮轨道高度 */
+            background-color: rgba(0,0,0,0.1);
+            border-radius: 5px;
+            z-index: 9998; /* 低于彩蛋，高于页面内容 */
+            cursor: pointer;
+        }
+        .scroll-thumb {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 50px; /* 滑块高度 */
+            background-color: #3498db;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+            cursor: grab;
+        }
+        .scroll-thumb:active {
+            cursor: grabbing;
+            background-color: #2980b9; /* 拖动时变色反馈 */
+        }
+
+        /* 保留上一版Good Luck彩蛋（无任何修改） */
+        .luck-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(
+                45deg, 
+                #ff00ff, #00ffff, #ff9900, 
+                #ff0099, #00ff99, #9900ff
+            );
+            background-size: 800% 800%;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            animation: bgFade 5s ease-in-out forwards;
+        }
+        .luck-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            font-size: 3rem;
+            font-weight: 700;
+            z-index: 10000;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(
+                45deg, 
+                #ff00ff, #00ffff, #ff9900, 
+                #ff0099, #00ff99, #9900ff
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-size: 800% 800%;
+            animation: textFade 5s ease-in-out forwards;
+        }
+        @keyframes bgFade {
+            0% { opacity: 0.3; background-position: 0% 50%; }
+            40% { opacity: 0.8; background-position: 100% 50%; }
+            60% { opacity: 0.8; background-position: 100% 50%; }
+            100% { opacity: 0; background-position: 0% 50%; }
+        }
+        @keyframes textFade {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); background-position: 0% 50%; }
+            40% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); background-position: 100% 50%; }
+            60% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); background-position: 100% 50%; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); background-position: 0% 50%; }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .avatar { width: 60px; height: 60px; font-size: 20px; }
+            .content-section { padding: 18px; margin-bottom: 20px; }
+            .section-title { font-size: 1.5rem; }
+            .info-card { padding: 15px; }
+            .info-item { padding: 10px 12px; margin-bottom: 10px; }
+            .info-item strong { width: 80px; }
+            .search-hint { padding-left: 84px; }
+            .nav-item { padding: 8px 12px; font-size: 0.85rem; }
+            .luck-text { font-size: 2rem; }
+            /* 移动端滑轮适配 */
+            .custom-scrollbar { height: 200px; right: 8px; }
+            .scroll-thumb { height: 40px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 新增：右侧可拖动滑轮（垂直居中） -->
+    <div class="custom-scrollbar">
+        <div class="scroll-thumb"></div>
+    </div>
+
+    <div class="header">
+        <div class="avatar">👤</div>
+        <h1>梁宇轩</h1>
+        <p>信号自动控制专业 | 专科毕业生</p>
+    </div>
+    <button id="downloadBtn">下载简历图片</button>
+    <div class="nav">
+        <div class="nav-container">
+            <div class="nav-item active" data-target="basic-info">个人基础信息</div>
+            <div class="nav-item" data-target="education">教育背景</div>
+            <div class="nav-item" data-target="major">专业技能</div>
+            <div class="nav-item" data-target="family">家庭成员</div>
+            <div class="nav-item" data-target="contact">联系方式</div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="content-section active" id="basic-info">
+            <h2 class="section-title">个人基础信息</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>基本信息</h3>
+                    <div class="info-item"><strong>姓名：</strong>梁宇轩</div>
+                    <div class="info-item"><strong>性别：</strong>男</div>
+                    <div class="info-item"><strong>民族：</strong>汉族</div>
+                    <div class="info-item"><strong>政治面貌：</strong>群众</div>
+                </div>
+                <div class="info-card">
+                    <h3>身份信息</h3>
+                    <div class="info-item"><strong>出生年月：</strong>2006-01-19</div>
+                    <div class="info-item"><strong>身份证号：</strong>411425200601190077</div>
+                    <div class="info-item"><strong>婚姻状况：</strong>未婚</div>
+                    <div class="info-item"><strong>最高学历：</strong>专科</div>
+                </div>
+                <div class="info-card">
+                    <h3>身体条件</h3>
+                    <div class="info-item"><strong>身高：</strong>170cm</div>
+                    <div class="info-item"><strong>体重：</strong>53kg</div>
+                    <div class="info-item"><strong>健康状况：</strong>良好</div>
+                    <div class="info-item"><strong>辨色力：</strong>正常</div>
+                </div>
+                <div class="info-card">
+                    <h3>视力情况</h3>
+                    <div class="info-item"><strong>左眼裸视：</strong>4.8（150度）</div>
+                    <div class="info-item"><strong>右眼裸视：</strong>4.7（200度）</div>
+                    <div class="info-item"><strong>左眼矫正：</strong>5.1（正常）</div>
+                    <div class="info-item"><strong>右眼矫正：</strong>5.0（正常）</div>
+                </div>
+                <div class="info-card">
+                    <h3>户籍信息</h3>
+                    <div class="info-item"><strong>户籍性质：</strong>城镇</div>
+                    <div class="info-item"><strong>户籍所在地：</strong>江苏徐州铜山区汉府雅园9号楼5单元</div>
+                    <div class="info-item"><strong>生源地：</strong>江苏省 徐州市 铜山区</div>
+                    <div class="info-item"><strong>籍贯：</strong>河南</div>
+                </div>
+                <div class="info-card">
+                    <h3>其他信息</h3>
+                    <div class="info-item"><strong>服从调剂：</strong>是</div>
+                    <div class="info-item"><strong>邮编：</strong>221116</div>
+                    <div class="info-item"><strong>通讯地址：</strong>江苏徐州铜山区汉府雅园9号楼5单元</div>
+                </div>
+            </div>
+        </div>
+        <div class="content-section" id="education">
+            <h2 class="section-title">教育背景</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>毕业院校</h3>
+                    <div class="info-item">
+                        <strong>学校名称：</strong>
+                        <a href="https://cn.bing.com/search?q=哈尔滨铁道职业技术学院" target="_blank" class="searchable-link">哈尔滨铁道职业技术学院</a>
+                        <span class="search-hint">点击触发必应搜索</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>所学专业：</strong>
+                        <a href="https://cn.bing.com/search?q=信号自动控制专业" target="_blank" class="searchable-link">信号自动控制</a>
+                        <span class="search-hint">点击触发必应搜索</span>
+                    </div>
+                    <div class="info-item"><strong>专业方向：</strong>信号自动控制</div>
+                    <div class="info-item"><strong>最高学历：</strong>专科</div>
+                </div>
+                <div class="info-card">
+                    <h3>时间信息</h3>
+                    <div class="info-item"><strong>毕业时间：</strong>2026-09-09</div>
+                    <div class="info-item"><strong>入学时间：</strong>2023-09（推算）</div>
+                    <div class="info-item"><strong>学制：</strong>3年（专科标准学制）</div>
+                    <div class="info-item"><strong>在校状态：</strong>2026年毕业</div>
+                </div>
+                <div class="info-card">
+                    <h3>专业相关</h3>
+                    <div class="info-item"><strong>核心领域：</strong>铁路信号、自动控制、轨道交通信号系统</div>
+                    <div class="info-item"><strong>学习重点：</strong>信号设备安装调试、系统维护、故障排查</div>
+                    <div class="info-item"><strong>拓展建议：</strong>可学习铁路信号规范、PLC控制技术</div>
+                    <div class="info-item" style="padding: 10px 0; margin-top: 5px;">
+                        <a href="https://cn.bing.com/search?q=哈尔滨铁道职业技术学院+信号自动控制专业" target="_blank" class="search-link">综合搜索专业详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-section" id="major">
+            <h2 class="section-title">专业技能与介绍</h2>
+            <div class="info-grid">
+                <div class="info-card" style="grid-column: 1 / -1;">
+                    <h3>信号自动控制专业核心介绍</h3>
+                    <div class="info-item">
+                        <strong>专业名称：</strong>
+                        <a href="https://cn.bing.com/search?q=信号自动控制专业+核心课程+就业方向" target="_blank" class="searchable-link">信号自动控制专业</a>
+                        <span class="search-hint">点击触发必应搜索</span>
+                    </div>
+                    <div class="major-intro">
+                        主要培养掌握铁路信号基础理论和专业技能，能从事轨道交通信号系统（如车站信号、区间信号、列车运行控制系统）的安装、调试、维护、管理及故障处理的高素质技术技能人才。核心课程包括《铁路信号基础》《区间信号自动控制》《车站信号自动控制》《列车运行控制系统》《信号设备故障处理》等，就业方向主要为铁路、地铁、城市轨道交通等企业的信号技术岗位。
+                    </div>
+                    <div style="padding: 10px 0;">
+                        <a href="https://cn.bing.com/search?q=信号自动控制专业+行业前景" target="_blank" class="search-link">搜索专业行业前景</a>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h3>核心能力</h3>
+                    <div class="info-item"><strong>1. </strong>掌握铁路信号设备的工作原理</div>
+                    <div class="info-item"><strong>2. </strong>具备信号系统安装与调试能力</div>
+                    <div class="info-item"><strong>3. </strong>能进行信号设备日常维护与故障排查</div>
+                    <div class="info-item"><strong>4. </strong>了解轨道交通信号行业规范与标准</div>
+                </div>
+                <div class="info-card">
+                    <h3>相关拓展</h3>
+                    <div class="info-item"><strong>行业趋势：</strong>智能化、数字化信号系统（如CTCS-3）</div>
+                    <div class="info-item"><strong>技能提升：</strong>学习PLC编程、SCADA系统操作</div>
+                    <div class="info-item">
+                        <strong>证书建议：</strong>
+                        <a href="https://cn.bing.com/search?q=铁路信号工+职业资格证书" target="_blank" class="searchable-link">铁路信号工职业资格证书</a>
+                    </div>
+                    <div class="info-item" style="padding: 10px 0; margin-top: 5px;">
+                        <a href="https://cn.bing.com/search?q=铁路信号工+职业资格证书+报考条件" target="_blank" class="search-link">搜索证书报考信息</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-section" id="family">
+            <h2 class="section-title">家庭成员信息</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>父亲</h3>
+                    <div class="info-item"><strong>姓名：</strong>梁西征</div>
+                    <div class="info-item"><strong>关系：</strong>父子</div>
+                    <div class="info-item"><strong>电话：</strong><a href="tel:13685199695">13685199695</a>（点击可拨号）</div>
+                </div>
+                <div class="info-card">
+                    <h3>母亲</h3>
+                    <div class="info-item"><strong>姓名：</strong>张莉</div>
+                    <div class="info-item"><strong>关系：</strong>母子</div>
+                    <div class="info-item"><strong>电话：</strong><a href="tel:13585383168">13585383168</a>（点击可拨号）</div>
+                </div>
+                <div class="info-card">
+                    <h3>家庭概况</h3>
+                    <div class="info-item"><strong>家庭住址：</strong>江苏徐州铜山区汉府雅园9号楼5单元（与户籍地址一致）</div>
+                    <div class="info-item"><strong>家庭类型：</strong>核心家庭（父母+本人）</div>
+                    <div class="info-item"><strong>联系说明：</strong>本人电话为主要联系方式，紧急情况可联系父母</div>
+                </div>
+            </div>
+        </div>
+        <div class="content-section" id="contact">
+            <h2 class="section-title">联系方式</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>电话联系</h3>
+                    <div class="info-item"><strong>手机号码：</strong><a href="tel:13104503517">13104503517</a></div>
+                    <div class="info-item"><strong>固定电话：</strong>无</div>
+                    <div class="info-item"><strong>提示：</strong>点击手机号码可直接拨号</div>
+                </div>
+                <div class="info-card">
+                    <h3>网络联系</h3>
+                    <div class="info-item"><strong>电子邮箱：</strong><a href="mailto:1938645179@qq.com">1938645179@qq.com</a></div>
+                    <div class="info-item"><strong>提示：</strong>点击邮箱地址可直接发邮件</div>
+                </div>
+                <div class="info-card">
+                    <h3>地址导航</h3>
+                    <div class="info-item">
+                        <strong>通讯地址：</strong>
+                        <a href="https://map.baidu.com/search/%E6%B1%9F%E8%8B%8F%E5%BE%90%E5%B7%9E%E9%93%9C%E5%B1%B1%E5%8C%BA%E6%B1%89%E5%BA%9C%E9%9B%85%E5%9B%AD9%E5%8F%B7%E6%A5%BC5%E5%8D%95%E5%85%83?querytype=s&c=132&wd=%E6%B1%9F%E8%8B%8F%E5%BE%90%E5%B7%9E%E9%93%9C%E5%B1%B1%E5%8C%BA%E6%B1%89%E5%BA%9C%E9%9B%85%E5%9B%AD9%E5%8F%B7%E6%A5%BC5%E5%8D%95%E5%85%83&da_src=shareurl" target="_blank">
+                            江苏徐州铜山区汉府雅园9号楼5单元
+                        </a>
+                    </div>
+                    <div class="info-item"><strong>邮编：</strong>221116</div>
+                    <div class="info-item"><strong>提示：</strong>点击地址可直接导航</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <canvas id="resumeCanvas"></canvas>
+    <script>
+        // 原简历所有JS逻辑完全保留
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                const targetId = item.getAttribute('data-target');
+                const targetSection = document.getElementById(targetId);
+                if (!targetSection.classList.contains('active')) {
+                    targetSection.classList.add('active');
+                }
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                setTimeout(() => {
+                    observer.disconnect();
+                    observeAllItems();
+                }, 300);
+            });
+        });
+        const infoItems = document.querySelectorAll('.info-item');
+        const majorIntros = document.querySelectorAll('.major-intro');
+        const allAnimateItems = [...infoItems, ...majorIntros];
+        let observer;
+        function initObserver() {
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('animate');
+                        }, index * 100);
+                    } else {
+                        entry.target.classList.remove('animate');
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            });
+        }
+        function observeAllItems() {
+            initObserver();
+            allAnimateItems.forEach(item => {
+                observer.observe(item);
+            });
+        }
+        window.addEventListener('load', () => {
+            observeAllItems();
+        });
+        const downloadBtn = document.getElementById('downloadBtn');
+        const canvas = document.getElementById('resumeCanvas');
+        const ctx = canvas.getContext('2d');
+        function initHiDpiCanvas() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = 375 * dpr;
+            canvas.height = 1200 * dpr;
+            ctx.scale(dpr, dpr);
+        }
+        function drawClearResume() {
+            initHiDpiCanvas();
+            const w = 375;
+            const h = 1200;
+            ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, w, h);
+            ctx.strokeStyle = '#f0f0f0';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(10, 10, w - 20, h - 20);
+            const titleGradient = ctx.createLinearGradient(0, 20, 0, 120);
+            titleGradient.addColorStop(0, '#2c3e50');
+            titleGradient.addColorStop(1, '#3498db');
+            ctx.fillStyle = titleGradient;
+            ctx.fillRect(10, 20, w - 20, 90);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '700 20px Noto Sans SC';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('梁宇轩 个人简历', w / 2, 55);
+            ctx.font = '400 14px Noto Sans SC';
+            ctx.fillText('信号自动控制专业 | 专科毕业生', w / 2, 85);
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = '500 13px Noto Sans SC';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            let y = 140;
+            const sectionGap = 30;
+            const lineGap = 20;
+            const leftPad = 25;
+            function drawSectionTitle(text, yPos) {
+                ctx.font = '600 16px Noto Sans SC';
+                ctx.fillStyle = '#3498db';
+                ctx.fillText(text, leftPad, yPos);
+                ctx.strokeStyle = '#e0e0e0';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(leftPad, yPos + 20);
+                ctx.lineTo(w - leftPad, yPos + 20);
+                ctx.stroke();
+                ctx.fillStyle = '#2c3e50';
+                ctx.font = '500 13px Noto Sans SC';
+                return yPos + 30;
+            }
+            y = drawSectionTitle('一、基本信息', y);
+            ctx.fillText('姓名：梁宇轩       性别：男', leftPad, y);
+            y += lineGap;
+            ctx.fillText('出生年月：2006-01-19    最高学历：专科', leftPad, y);
+            y += lineGap;
+            ctx.fillText('身高：170cm    健康状况：良好', leftPad, y);
+            y += lineGap;
+            ctx.fillText('户籍性质：城镇     生源地：江苏省徐州市', leftPad, y);
+            y += lineGap;
+            ctx.fillText('铜山区', leftPad + 60, y);
+            y += lineGap;
+            ctx.fillText('户籍地址：江苏徐州铜山区汉府雅园', leftPad, y);
+            y += lineGap;
+            ctx.fillText('9号楼5单元', leftPad + 60, y);
+            y += sectionGap;
+            y = drawSectionTitle('二、教育背景', y);
+            ctx.fillText('毕业院校：哈尔滨铁道职业技术', leftPad, y);
+            y += lineGap;
+            ctx.fillText('学院', leftPad + 60, y);
+            y += lineGap;
+            ctx.fillText('所学专业：信号自动控制（专业方向：', leftPad, y);
+            y += lineGap;
+            ctx.fillText('信号自动控制）', leftPad + 60, y);
+            y += lineGap;
+            ctx.fillText('入学时间：2023-09    学制：3年', leftPad, y);
+            y += lineGap;
+            ctx.fillText('毕业时间：2026-09-09    在校状态：2026年毕业', leftPad, y);
+            y += sectionGap;
+            y = drawSectionTitle('三、专业技能', y);
+            ctx.fillText('• 掌握铁路信号设备工作原理与安装调试', leftPad, y);
+            y += lineGap;
+            ctx.fillText('• 具备信号设备维护与故障排查能力', leftPad, y);
+            y += lineGap;
+            ctx.fillText('• 了解轨道交通信号行业规范与标准', leftPad, y);
+            y += lineGap;
+            ctx.fillText('• 行业趋势：智能化信号系统（如CTCS-3）', leftPad, y);
+            y += sectionGap;
+            y = drawSectionTitle('四、家庭与联系', y);
+            ctx.fillText('家庭成员：父亲（梁西征）、母亲（张莉）', leftPad, y);
+            y += lineGap;
+            ctx.fillText('父亲电话：13685199695    母亲电话：', leftPad, y);
+            y += lineGap;
+            ctx.fillText('13585383168', leftPad + 60, y);
+            y += lineGap;
+            ctx.fillText('本人电话：13104503517', leftPad, y);
+            y += lineGap;
+            ctx.fillText('电子邮箱：1938645179@', leftPad, y);
+            y += lineGap;
+            ctx.fillText('qq.com', leftPad + 60, y);
+            y += lineGap;
+            ctx.fillText('通讯地址：江苏徐州铜山区汉府雅园', leftPad, y);
+            y += lineGap;
+            ctx.fillText('9号楼5单元    邮编：221116', leftPad + 60, y);
+            y += lineGap;
+            ctx.fillText('服从调剂：是', leftPad, y);
+        }
+        downloadBtn.addEventListener('click', function() {
+            drawClearResume();
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.download = '梁宇轩简历.png';
+                link.click();
+            }, 300);
+        });
+
+        // 新增：右侧可拖动滑轮逻辑（纯控制页面滚动，与彩蛋无任何关联）
+        const scrollbar = document.querySelector('.custom-scrollbar');
+        const scrollThumb = document.querySelector('.scroll-thumb');
+        let isDragging = false;
+
+        // 计算滚动参数（页面总高度、轨道可拖动范围）
+        function getScrollParams() {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight; // 页面可滚动总高度
+            const trackHeight = scrollbar.offsetHeight; // 滑轮轨道高度
+            const thumbHeight = scrollThumb.offsetHeight; // 滑块高度
+            const maxThumbTop = trackHeight - thumbHeight; // 滑块最大可移动距离（不超出轨道）
+            return { docHeight, maxThumbTop };
+        }
+
+        // 页面滚动时，同步滑块位置（确保滑块与页面滚动状态一致）
+        function syncThumbToScroll() {
+            const { docHeight, maxThumbTop } = getScrollParams();
+            const scrollTop = window.scrollY; // 当前页面滚动距离
+            const thumbTop = (scrollTop / docHeight) * maxThumbTop; // 滑块应处位置
+            scrollThumb.style.top = `${thumbTop}px`;
+        }
+
+        // 拖动滑块时，同步页面滚动（流畅滚动）
+        function syncScrollToThumb(thumbTop) {
+            const { docHeight, maxThumbTop } = getScrollParams();
+            const scrollTop = (thumbTop / maxThumbTop) * docHeight; // 页面应滚动到的位置
+            window.scrollTo({ 
+                top: scrollTop, 
+                behavior: 'smooth' // 流畅滚动动画，非机械跳转
+            });
+        }
+
+        // 1. PC端鼠标拖动逻辑
+        scrollThumb.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            const startY = e.clientY; // 鼠标按下时的Y坐标
+            const startThumbTop = parseFloat(scrollThumb.style.top) || 0; // 滑块初始位置
+
+            // 拖动过程中
+            function handleMouseMove(e) {
+                if (!isDragging) return;
+                const moveY = e.clientY - startY; // 鼠标移动距离
+                const { maxThumbTop } = getScrollParams();
+                let newThumbTop = startThumbTop + moveY;
+                // 限制滑块在轨道内（不超出上下边界）
+                newThumbTop = Math.max(0, Math.min(newThumbTop, maxThumbTop));
+                scrollThumb.style.top = `${newThumbTop}px`;
+                syncScrollToThumb(newThumbTop); // 同步页面滚动
+            }
+
+            // 拖动结束（松开鼠标）
+            function handleMouseUp() {
+                isDragging = false;
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+            }
+
+            // 绑定事件（拖动和结束）
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        });
+
+        // 2. 移动端触摸拖动逻辑
+        scrollThumb.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            const startY = e.touches[0].clientY; // 触摸开始时的Y坐标
+            const startThumbTop = parseFloat(scrollThumb.style.top) || 0;
+
+            function handleTouchMove(e) {
+                if (!isDragging) return;
+                const moveY = e.touches[0].clientY - startY;
+                const { maxThumbTop } = getScrollParams();
+                let newThumbTop = startThumbTop + moveY;
+                newThumbTop = Math.max(0, Math.min(newThumbTop, maxThumbTop));
+                scrollThumb.style.top = `${newThumbTop}px`;
+                syncScrollToThumb(newThumbTop);
+            }
+
+            function handleTouchEnd() {
+                isDragging = false;
+                document.removeEventListener('touchmove', handleTouchMove);
+                document.removeEventListener('touchend', handleTouchEnd);
+            }
+
+            document.addEventListener('touchmove', handleTouchMove);
+            document.addEventListener('touchend', handleTouchEnd);
+        });
+
+        // 3. 点击轨道跳转（点击轨道任意位置，滑块跳转到对应位置）
+        scrollbar.addEventListener('click', (e) => {
+            if (e.target === scrollThumb) return; // 点击滑块本身不触发跳转
+            const rect = scrollbar.getBoundingClientRect();
+            const clickY = e.clientY - rect.top; // 点击位置在轨道内的Y坐标
+            const { maxThumbTop, thumbHeight } = getScrollParams();
+            let newThumbTop = clickY - thumbHeight / 2; // 滑块居中对齐点击位置
+            newThumbTop = Math.max(0, Math.min(newThumbTop, maxThumbTop));
+            scrollThumb.style.top = `${newThumbTop}px`;
+            syncScrollToThumb(newThumbTop);
+        });
+
+        // 4. 初始化&窗口 resize 时同步滑块位置（避免错位）
+        window.addEventListener('load', syncThumbToScroll);
+        window.addEventListener('resize', syncThumbToScroll);
+        window.addEventListener('scroll', syncThumbToScroll);
+
+        // 保留上一版Good Luck彩蛋逻辑（无任何修改，与滑轮完全独立）
+        const avatar = document.querySelector('.avatar');
+        let clickCount = 0;
+        const maxClicks = 5;
+        let isAnimating = false;
+
+        function startLuckAnimation() {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            const luckBg = document.createElement('div');
+            luckBg.className = 'luck-bg';
+            const luckText = document.createElement('div');
+            luckText.className = 'luck-text';
+            luckText.textContent = 'Good Luck';
+            document.body.appendChild(luckBg);
+            document.body.appendChild(luckText);
+
+            // 5秒后自动移除彩蛋（与动画时长同步）
+            setTimeout(() => {
+                luckBg.remove();
+                luckText.remove();
+                isAnimating = false;
+                clickCount = 0;
+            }, 5000);
+        }
+
+        avatar.addEventListener('click', () => {
+            if (isAnimating) return;
+            clickCount++;
+            if (clickCount === maxClicks) {
+                startLuckAnimation();
+            }
+            // 3秒超时未完成5次点击，重置计数
+            clearTimeout(window.luckTimer);
+            window.luckTimer = setTimeout(() => {
+                clickCount = 0;
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
